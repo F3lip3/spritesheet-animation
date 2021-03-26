@@ -1,0 +1,12 @@
+{
+  "name": "spritesheet-animation",
+  "displayName": "spritesheet-animation",
+  "expo": {
+    "name": "spritesheet-animation",
+    "slug": "spritesheet-animation",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
