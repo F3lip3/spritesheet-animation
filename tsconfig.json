@@ -2,10 +2,12 @@
   "compilerOptions": {
     "jsx": "react-native",
     "target": "esnext",
+    "module": "commonjs",
     "lib": ["esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "noEmit": true,
+    "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,

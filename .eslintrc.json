@@ -28,14 +28,8 @@
     "arrow-parens": ["error", "as-needed"],
     "camelcase": "off",
     "comma-dangle": ["error", "never"],
+    "global-require": "off",
     "implicit-arrow-linebreak": "off",
-    "operator-linebreak": 0,
-    "object-curly-newline": [
-      "error",
-      {
-        "ImportDeclaration": { "consistent": true }
-      }
-    ],
     "import/extensions": [
       "error",
       "ignorePackages",
@@ -68,6 +62,13 @@
     "no-underscore-dangle": "off",
     "no-use-before-define": "off",
     "no-shadow": "off",
+    "operator-linebreak": 0,
+    "object-curly-newline": [
+      "error",
+      {
+        "ImportDeclaration": { "consistent": true }
+      }
+    ],
     "prettier/prettier": "error",
     "react/jsx-curly-newline": "off",
     "react/jsx-filename-extension": [
