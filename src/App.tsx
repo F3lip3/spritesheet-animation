@@ -1,12 +1,12 @@
 import React from 'react';
-import { StyleSheet, View } from 'react-native';
+import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import Sprite from './components/Sprite';
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: '#303030',
     alignItems: 'center',
     justifyContent: 'center'
   }
@@ -14,10 +14,13 @@ const styles = StyleSheet.create({
 
 const App: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <Sprite />
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <SafeAreaView style={{ backgroundColor: 'yellow' }} />
+      <View style={styles.container}>
+        <Sprite />
+        <StatusBar hidden />
+      </View>
+    </>
   );
 };
 

@@ -7,6 +7,8 @@ export interface SpriteProps {
   source: ImageSourcePropType;
   rows: number;
   columns: number;
+  left: number;
+  top: number;
   width?: number;
   height?: number;
 }
@@ -15,7 +17,9 @@ const Sprite: React.FC = () => {
   const [sprite, setSprite] = useState<SpriteProps>({
     source: require('../../assets/player01.png'),
     rows: 4,
-    columns: 3
+    columns: 3,
+    left: 0,
+    top: 0
   });
 
   useEffect(() => {
@@ -32,7 +36,7 @@ const Sprite: React.FC = () => {
   }, [sprite]);
 
   return (
-    <SpriteContainer height={sprite.height} width={sprite.width}>
+    <SpriteContainer {...sprite}>
       <SpriteImage source={sprite.source} />
     </SpriteContainer>
   );
