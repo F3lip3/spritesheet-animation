@@ -1,13 +1,13 @@
 import styled from 'styled-components/native';
 
-interface SpriteContainerProps {
+interface SpriteProps {
   left: number;
   top: number;
   height?: number;
   width?: number;
 }
 
-export const SpriteContainer = styled.View<SpriteContainerProps>`
+export const SpriteContainer = styled.View<SpriteProps>`
   overflow: hidden;
   position: absolute;
   background-color: red;
@@ -15,8 +15,8 @@ export const SpriteContainer = styled.View<SpriteContainerProps>`
   height: ${props => props.height ?? 16}px;
   width: ${props => props.width ?? 16}px;
 
-  left: ${props => props.left}px;
-  top: ${props => props.top}px;
+  left: ${props => props.left};
+  top: ${props => props.top};
 `;
 
 export const SpriteImage = styled.Image`
