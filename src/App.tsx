@@ -30,7 +30,13 @@ const App: React.FC = () => {
           style={styles.game}
           systems={[SpriteMovement]}
           entities={{
-            player: { renderer: <Sprite left={50} /> }
+            player: {
+              futureX: 0,
+              futureY: 0,
+              x: 0,
+              y: 0,
+              renderer: Sprite
+            }
           }}
         >
           <StatusBar hidden />

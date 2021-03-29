@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { memo, useEffect, useState } from 'react';
 import { Image, ImageSourcePropType } from 'react-native';
 
 import { SpriteContainer, SpriteImage } from './styles';
@@ -10,19 +10,16 @@ export interface SpriteSheetProps {
   source?: ImageSourcePropType;
 }
 
-interface SpritePosition {
-  left?: number;
-  top?: number;
-}
-
 interface SpriteProps {
-  left: number;
-  top: number;
+  x: number;
+  y: number;
   height?: number;
   width?: number;
+  futureX: number;
+  futureY: number;
 }
 
-const Sprite: React.FC<SpritePosition> = ({ left = 0, top = 0 }) => {
+const Sprite: React.FC<SpriteProps> = ({ futureX, futureY, x, y }) => {
   const [data, setData] = useState<SpriteSheetProps>({
     path: '../../assets/player01.png',
     rows: 4,
@@ -30,8 +27,10 @@ const Sprite: React.FC<SpritePosition> = ({ left = 0, top = 0 }) => {
   });
 
   const [spriteProps, setSpriteProps] = useState<SpriteProps>({
-    left,
-    top
+    futureX,
+    futureY,
+    x,
+    y
   });
 
   useEffect(() => {
@@ -50,12 +49,22 @@ const Sprite: React.FC<SpritePosition> = ({ left = 0, top = 0 }) => {
   }, [data]);
 
   useEffect(() => {
-    setSpriteProps(currentProps => ({ ...currentProps, left, top }));
-  }, [left, top]);
+    setSpriteProps(currentProps => {
+      return {
+        ...currentProps,
+        futureX,
+        futureY
+      };
+    });
+  }, [futureX, futureY]);
 
   useEffect(() => {
-    console.info('sprite props:', spriteProps);
-  }, [spriteProps]);
+    setSpriteProps(currentProps => ({
+      ...currentProps,
+      x,
+      y
+    }));
+  }, [x, y]);
 
   return (
     <SpriteContainer {...spriteProps}>
@@ -64,4 +73,4 @@ const Sprite: React.FC<SpritePosition> = ({ left = 0, top = 0 }) => {
   );
 };
 
-export default Sprite;
+export default memo(Sprite);
