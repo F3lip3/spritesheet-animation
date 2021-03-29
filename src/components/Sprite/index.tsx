@@ -3,23 +3,48 @@ import { Image, ImageSourcePropType } from 'react-native';
 
 import { SpriteContainer, SpriteImage } from './styles';
 
-export interface SpriteSheetProps {
+export type Direction = 'up' | 'down' | 'left' | 'right';
+export type SpriteDirection = { [key in Direction]: number };
+
+interface SpriteSheetProps {
   path: string;
   rows: number;
   columns: number;
   source?: ImageSourcePropType;
 }
 
-interface SpriteProps {
+export interface SpriteProps {
   x: number;
   y: number;
   height?: number;
   width?: number;
   futureX: number;
   futureY: number;
+  direction?: Direction;
 }
 
-const Sprite: React.FC<SpriteProps> = ({ futureX, futureY, x, y }) => {
+interface SpriteImageProps {
+  source?: ImageSourcePropType;
+  direction: number;
+  step: number;
+  height: number;
+  width: number;
+}
+
+const directions: SpriteDirection = {
+  down: 0,
+  left: 1,
+  right: 2,
+  up: 3
+};
+
+const Sprite: React.FC<SpriteProps> = ({
+  futureX,
+  futureY,
+  x,
+  y,
+  direction = 'down'
+}) => {
   const [data, setData] = useState<SpriteSheetProps>({
     path: '../../assets/player01.png',
     rows: 4,
@@ -30,7 +55,15 @@ const Sprite: React.FC<SpriteProps> = ({ futureX, futureY, x, y }) => {
     futureX,
     futureY,
     x,
-    y
+    y,
+    direction
+  });
+
+  const [imageProps, setImageProps] = useState<SpriteImageProps>({
+    direction: directions[direction],
+    step: 1,
+    height: 0,
+    width: 0
   });
 
   useEffect(() => {
@@ -41,6 +74,12 @@ const Sprite: React.FC<SpriteProps> = ({ futureX, futureY, x, y }) => {
         setData(currentData => ({ ...currentData, source }));
         setSpriteProps(currentProps => ({
           ...currentProps,
+          height: asset.height / data.rows,
+          width: asset.width / data.columns
+        }));
+        setImageProps(currentProps => ({
+          ...currentProps,
+          source,
           height: asset.height / data.rows,
           width: asset.width / data.columns
         }));
@@ -64,11 +103,41 @@ const Sprite: React.FC<SpriteProps> = ({ futureX, futureY, x, y }) => {
       x,
       y
     }));
-  }, [x, y]);
+    setImageProps(currentProps => {
+      let { step } = currentProps;
+      const finished = x === spriteProps.futureX && y === spriteProps.futureY;
+      if (finished) {
+        step = 1;
+      } else {
+        const stepSize =
+          currentProps.direction !== directions[direction] ||
+          ((direction === 'left' || direction === 'right') &&
+            x % Math.floor(currentProps.width / data.columns) === 0) ||
+          ((direction === 'down' || direction === 'up') &&
+            y % Math.floor(currentProps.height / data.columns) === 0)
+            ? 1
+            : 0;
+
+        if (step + stepSize >= data.columns) {
+          step = 0;
+        } else {
+          step += stepSize;
+        }
+      }
+
+      console.info('step:', step);
+
+      return {
+        ...currentProps,
+        direction: directions[direction],
+        step
+      };
+    });
+  }, [x, y, direction, data.columns, spriteProps.futureX, spriteProps.futureY]);
 
   return (
     <SpriteContainer {...spriteProps}>
-      <SpriteImage source={data.source} />
+      <SpriteImage {...imageProps} />
     </SpriteContainer>
   );
 };

@@ -1,7 +1,28 @@
 import { GameEngineSystem } from 'react-native-game-engine';
 
-const STEP_X = 32;
-const STEP_Y = 32;
+interface SpriteMovementProps {
+  buffer: {
+    x: number;
+    y: number;
+  };
+  step: {
+    x: number;
+    y: number;
+  };
+  speed: number;
+}
+
+const movementData: SpriteMovementProps = {
+  buffer: {
+    x: 0,
+    y: 0
+  },
+  step: {
+    x: 32,
+    y: 32
+  },
+  speed: 1
+};
 
 const SpriteMovement: GameEngineSystem = (entities, { touches }) => {
   const { player } = entities;
@@ -11,8 +32,8 @@ const SpriteMovement: GameEngineSystem = (entities, { touches }) => {
     if (touch?.event) {
       const futureX = Math.round(touch.event.pageX);
       const futureY = Math.round(touch.event.pageY);
-      const remainderX = futureX % STEP_X;
-      const remainderY = futureY % STEP_Y;
+      const remainderX = futureX % movementData.step.x;
+      const remainderY = futureY % movementData.step.y;
 
       return {
         ...entities,
@@ -26,12 +47,12 @@ const SpriteMovement: GameEngineSystem = (entities, { touches }) => {
 
     let stepX = 0;
     if (player.x !== player.futureX) {
-      stepX = STEP_X * (player.x > player.futureX ? -1 : 1);
+      stepX = movementData.speed * (player.x > player.futureX ? -1 : 1);
     }
 
     let stepY = 0;
     if (player.y !== player.futureY) {
-      stepY = STEP_Y * (player.y > player.futureY ? -1 : 1);
+      stepY = movementData.speed * (player.y > player.futureY ? -1 : 1);
     }
 
     if (stepX !== 0 || stepY !== 0) {
@@ -47,21 +68,37 @@ const SpriteMovement: GameEngineSystem = (entities, { touches }) => {
           stepY > 0 ? player.futureY - player.y : player.y - player.futureY;
       }
 
-      if (distanceX > distanceY) {
+      if (
+        distanceX > distanceY &&
+        movementData.buffer.x >= 0 &&
+        movementData.buffer.y === 0
+      ) {
+        movementData.buffer.x += movementData.speed;
+        if (movementData.buffer.x === movementData.step.x) {
+          movementData.buffer.x = 0;
+        }
+
         return {
           ...entities,
           player: {
             ...player,
-            x: player.x + stepX
+            x: player.x + stepX,
+            direction: stepX > 0 ? 'right' : 'left'
           }
         };
+      }
+
+      movementData.buffer.y += movementData.speed;
+      if (movementData.buffer.y === movementData.step.y) {
+        movementData.buffer.y = 0;
       }
 
       return {
         ...entities,
         player: {
           ...player,
-          y: player.y + stepY
+          y: player.y + stepY,
+          direction: stepY > 0 ? 'down' : 'up'
         }
       };
     }

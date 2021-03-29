@@ -7,10 +7,16 @@ interface SpriteProps {
   width?: number;
 }
 
+interface SpriteImageProps {
+  direction: number;
+  step: number;
+  height: number;
+  width: number;
+}
+
 export const SpriteContainer = styled.View<SpriteProps>`
   overflow: hidden;
   position: absolute;
-  background-color: red;
 
   height: ${props => props.height ?? 32}px;
   width: ${props => props.width ?? 32}px;
@@ -19,6 +25,7 @@ export const SpriteContainer = styled.View<SpriteProps>`
   top: ${props => props.y}px;
 `;
 
-export const SpriteImage = styled.Image`
-  transform: translateX(-64px);
+export const SpriteImage = styled.Image<SpriteImageProps>`
+  transform: translateX(${props => props.step * props.width * -1}px)
+    translateY(${props => props.direction * props.height * -1}px);
 `;
