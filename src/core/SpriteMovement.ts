@@ -21,7 +21,7 @@ const movementData: SpriteMovementProps = {
     x: 32,
     y: 32
   },
-  speed: 1
+  speed: 2
 };
 
 const SpriteMovement: GameEngineSystem = (entities, { touches }) => {

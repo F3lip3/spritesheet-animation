@@ -125,8 +125,6 @@ const Sprite: React.FC<SpriteProps> = ({
         }
       }
 
-      console.info('step:', step);
-
       return {
         ...currentProps,
         direction: directions[direction],
